@@ -54,19 +54,19 @@ DB_HOST=localhost
 
 Reemplazar `usuariodepostgres` y `passwordDePostgres` con tus propias credenciales para conectarte a postgres. Este archivo va ser ignorado en la subida a github, ya que contiene información sensible (las credenciales).
 
-Adicionalmente será necesario que creen desde psql una base de datos llamada `videogames`
+Adicionalmente será necesario que creen desde psql una base de datos llamada `dogs`
 
 El contenido de `client` fue creado usando: Create React App.
 
 ## Enunciado
 
-La idea general es crear una aplicación en la cual se puedan ver los distintos videojuegos disponibles junto con información relevante de los mismos utilizando la api externa [rawg](https://rawg.io/apidocs) y a partir de ella poder, entre otras cosas:
+La idea general es crear una aplicación en la cual se puedan ver distintas razas de perro junto con información relevante de las mismas utilizando la api externa [the dog api](https://thedogapi.com/) y a partir de ella poder, entre otras cosas:
 
-  - Buscar videjuegos
+  - Buscar perros
   - Filtrarlos / Ordenarlos
-  - Agregar nuevos videojuegos
+  - Agregar nuevos perros
 
-__IMPORTANTE__: Para poder utilizar esta API externa es necesario crearse una cuenta para obtener una API Key que luego debera ser incluida en todos los request que hagamos a rawg simplemente agregando `?key={YOUR_API_KEY}` al final de cada endpoint. Agregar la clave en el archivo `.env` para que la misma no se suba al repositorio por cuestiones de seguridad y utilizarla desde allí.
+__IMPORTANTE__: Para poder utilizar esta API externa es necesario crearse una cuenta para obtener una API Key que luego debera ser incluida en todos los request que hagamos a rawg simplemente agregando `?api_key={YOUR_API_KEY}` al final de cada endpoint. Agregar la clave en el archivo `.env` para que la misma no se suba al repositorio por cuestiones de seguridad y utilizarla desde allí.
 
 ### Requerimientos mínimos:
 
@@ -89,48 +89,45 @@ __Pagina inicial__: deben armar una landing page con
 - [ ] Botón para ingresar al home (`Ruta principal`)
 
 __Ruta principal__: debe contener
-- [ ] Input de búsqueda para encontrar videojuegos por nombre
-- [ ] Área donde se verá el listado de videojuegos. Deberá mostrar su:
+- [ ] Input de búsqueda para encontrar razas de perros por nombre
+- [ ] Área donde se verá el listado de razas de perros. Deberá mostrar su:
   - Imagen
   - Nombre
-  - Géneros
-- [ ] Botones/Opciones para filtrar por por género y por videojuego existente o agregado por nosotros
-- [ ] Botones/Opciones para ordenar los videojuegos
-- [ ] Paginado para ir buscando y mostrando los siguientes videojuegos
+  - Temperamento
+- [ ] Botones/Opciones para filtrar por por temperamento y por raza existente o agregada por nosotros
+- [ ] Botones/Opciones para ordenar las razas
+- [ ] Paginado para ir buscando y mostrando las siguientes razas
 
-__Ruta de detalle de videojuego__: debe contener
-- [ ] Los campos mostrados en la ruta principal para cada videojuegos (imagen, nombre, y géneros)
-- [ ] Descripción
-- [ ] Fecha de lanzamiento
-- [ ] Rating
-- [ ] Plataformas
+__Ruta de detalle de raza de perro__: debe contener
+- [ ] Los campos mostrados en la ruta principal para cada raza (imagen, nombre y temperamento)
+- [ ] Altura
+- [ ] Peso
+- [ ] Años de vida
 
-__Ruta de creación de videojuegos__: debe contener
+__Ruta de creación de raza de perro__: debe contener
 - [ ] Un formulario __controlado__ con los siguientes campos
   - Nombre
-  - Descripción
-  - Fecha de lanzamiento
-  - Rating
-- [ ] Posibilidad de seleccionar/agregar varios géneros
-- [ ] Posibilidad de seleccionar/agregar varias plataformas
-- [ ] Botón/Opción para crear un nuevo videojuego
+  - Altura (Diferenciar entre macho y hembra)
+  - Peso (Diferenciar entre macho y hembra)
+  - Años de vida
+- [ ] Posibilidad de seleccionar/agregar temperamento
+- [ ] Botón/Opción para crear una nueva raza de perro
 
 #### Base de datos
 
 El modelo de la base de datos deberá tener las siguientes entidades (Aquellas propiedades marcadas con asterísco deben ser obligatorias):
 
-- [ ] Videojuego con las siguientes propiedades:
-  - ID: * No puede ser un ID de un videojuego ya existente en la API rawg
+- [ ] Raza con las siguientes propiedades:
+  - ID: * No puede ser un ID de una raza de perro ya existente en la API externa
   - Nombre *
-  - Descripción *
-  - Fecha de lanzamiento
-  - Rating
-  - Plataformas *
-- [ ] Genero con las siguientes propiedades:
+  - Altura *
+  - Peso *
+  - Años de vida
+- [ ] Temperamento con las siguientes propiedades:
   - ID
   - Nombre
 
-La relación entre ambas entidades debe ser de muchos a muchos ya que un videojuego puede pertenecer a varios géneros en simultaneo y, a su vez, un género puede contener múltiples videojuegos distintos. Un ejemplo sería el juego `Counter Strike` pertenece a los géneros Shooter y Action al mismo tiempo. Pero a su vez existen otros videojuegos considerados como Shooter o como Action.
+La relación entre ambas entidades debe ser de muchos a muchos ya que una raza de perro puede tener varios "temperamentos" en simultaneo y, a su vez, un "temperamento" puede corresponder a múltiples razas de perro distintas. Por ejemplo la raza `pug` es docil, inteligente y sociable (entre otras). Pero a su vez existen otras razas de perro que también son sociables o inteligentes.
 
 #### Backend
 
@@ -138,23 +135,22 @@ Se debe desarrollar un servidor en Node/Express con las siguientes rutas:
 
 __IMPORTANTE__: No está permitido utilizar los filtrados, ordenamientos y paginados brindados por la API externa, todas estas funcionalidades tienen que implementarlas ustedes.
 
-- [ ] __GET /videogames__:
-  - Obtener un listado de los primeras 15 videojuegos
+- [ ] __GET /dogs__:
+  - Obtener un listado de las primeras 8 razas de perro
   - Debe devolver solo los datos necesarios para la ruta principal
-- [ ] __GET /videogames?name="..."__:
-  - Obtener un listado de las primeros 15 videojuegos que contengan la palabra ingresada como query parameter
-  - Si no existe ningún videojuego mostrar un mensaje adecuado
-- [ ] __GET /videogame/{idVideogame}__:
-  - Obtener el detalle de un videojuego en particular
-  - Debe traer solo los datos pedidos en la ruta de detalle de videojuego
-  - Incluir los géneros asociados
-- [ ] __GET /genres__:
-  - Obtener todos los tipos de géneros de videojuegos posibles
-  - En una primera instancia deberán traerlos desde rawg y guardarlos en su propia base de datos y luego ya utilizarlos desde allí
-- [ ] __POST /videogame__:
-  - Recibe los datos recolectados desde el formulario controlado de la ruta de creación de videojuego por body
-  - Crea un videojuego en la base de datos
-
+- [ ] __GET /dogs?name="..."__:
+  - Obtener un listado de las primeras 8 razas de perro que contengan la palabra ingresada como query parameter
+  - Si no existe ninguna raza de perro mostrar un mensaje adecuado
+- [ ] __GET /dogs/{idRaza}__:
+  - Obtener el detalle de una raza de perro en particular
+  - Debe traer solo los datos pedidos en la ruta de detalle de raza de perro
+  - Incluir los temperamentos asociados
+- [ ] __GET /temperament__:
+  - Obtener todos los temperamentos posibles
+  - En una primera instancia deberán obtenerlos desde la API externa y guardarlos en su propia base de datos y luego ya utilizarlos desde allí
+- [ ] __POST /dog__:
+  - Recibe los datos recolectados desde el formulario controlado de la ruta de creación de raza de perro por body
+  - Crea una raza de perro en la base de datos
 
 #### Testing
 - [ ] Al menos tener un componente del frontend con sus tests respectivos
