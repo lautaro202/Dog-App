@@ -70,6 +70,10 @@ __IMPORTANTE__: Para las funcionalidades de filtrado y ordenamiento NO pueden ut
 
 __IMPORTANTE__: Para poder utilizar esta API externa es necesario crearse una cuenta para obtener una API Key que luego debera ser incluida en todos los request que hagamos a rawg simplemente agregando `?api_key={YOUR_API_KEY}` al final de cada endpoint. Agregar la clave en el archivo `.env` para que la misma no se suba al repositorio por cuestiones de seguridad y utilizarla desde allí.
 
+### Endpoints que deben utilizar:
+
+  - 
+
 ### Requerimientos mínimos:
 
 A continuación se detallaran los requerimientos mínimos para la aprobación del proyecto individial. Aquellos que deseen agregar más funcionalidades podrán hacerlo. En cuanto al diseño visual no va a haber wireframes ni prototipos prefijados sino que tendrán libertad de hacerlo a su gusto pero tienen que aplicar los conocimientos de estilos vistos en el curso para que quede agradable a la vista.
@@ -109,10 +113,10 @@ __Ruta de detalle de raza de perro__: debe contener
 __Ruta de creación de raza de perro__: debe contener
 - [ ] Un formulario __controlado__ con los siguientes campos
   - Nombre
-  - Altura (Diferenciar entre macho y hembra)
-  - Peso (Diferenciar entre macho y hembra)
+  - Altura (Diferenciar entre altura mínima y máxima)
+  - Peso (Diferenciar entre peso mínimo y máximo)
   - Años de vida
-- [ ] Posibilidad de seleccionar/agregar temperamento
+- [ ] Posibilidad de seleccionar/agregar uno o más temperamentos
 - [ ] Botón/Opción para crear una nueva raza de perro
 
 #### Base de datos
