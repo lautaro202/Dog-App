@@ -66,13 +66,14 @@ La idea general es crear una aplicación en la cual se puedan ver distintas raza
   - Filtrarlos / Ordenarlos
   - Agregar nuevos perros
 
-__IMPORTANTE__: Para las funcionalidades de filtrado y ordenamiento NO pueden utilizar los endpoints de la API externa que ya devuelven los resultados filtrados u ordenados sino que deben realizarlo ustedes mismos. En particular alguno de los ordenamientos o filtrados debe si o si realizarse desde el frontend.
-
 __IMPORTANTE__: Para poder utilizar esta API externa es necesario crearse una cuenta para obtener una API Key que luego debera ser incluida en todos los request que hagamos a rawg simplemente agregando `?api_key={YOUR_API_KEY}` al final de cada endpoint. Agregar la clave en el archivo `.env` para que la misma no se suba al repositorio por cuestiones de seguridad y utilizarla desde allí.
 
-### Endpoints que deben utilizar:
+__IMPORTANTE__: Para las funcionalidades de filtrado y ordenamiento NO pueden utilizar los endpoints de la API externa que ya devuelven los resultados filtrados u ordenados sino que deben realizarlo ustedes mismos. En particular alguno de los ordenamientos o filtrados debe si o si realizarse desde el frontend.
 
-  - 
+### Únicos Endpoints/Flags que pueden utilizar
+
+  - GET https://api.thedogapi.com/v1/breeds
+  - GET https://api.thedogapi.com/v1/breeds/search?q={raza_perro}
 
 ### Requerimientos mínimos:
 
@@ -104,6 +105,8 @@ __Ruta principal__: debe contener
 - [ ] Botones/Opciones para ordenar tanto ascendentemente como descendentemente las razas de perro por orden alfabético y por peso
 - [ ] Paginado para ir buscando y mostrando las siguientes razas
 
+__IMPORTANTE__: Dentro de la Ruta Principal se deben mostrar tanto las razas de perros traidas desde la API como así también las de la base de datos.
+
 __Ruta de detalle de raza de perro__: debe contener
 - [ ] Los campos mostrados en la ruta principal para cada raza (imagen, nombre y temperamento)
 - [ ] Altura
@@ -124,7 +127,7 @@ __Ruta de creación de raza de perro__: debe contener
 El modelo de la base de datos deberá tener las siguientes entidades (Aquellas propiedades marcadas con asterísco deben ser obligatorias):
 
 - [ ] Raza con las siguientes propiedades:
-  - ID: * No puede ser un ID de una raza de perro ya existente en la API externa
+  - ID *
   - Nombre *
   - Altura *
   - Peso *
@@ -134,6 +137,8 @@ El modelo de la base de datos deberá tener las siguientes entidades (Aquellas p
   - Nombre
 
 La relación entre ambas entidades debe ser de muchos a muchos ya que una raza de perro puede tener varios "temperamentos" en simultaneo y, a su vez, un "temperamento" puede corresponder a múltiples razas de perro distintas. Por ejemplo la raza `pug` es docil, inteligente y sociable (entre otras). Pero a su vez existen otras razas de perro que también son sociables o inteligentes.
+
+__IMPORTANTE__: Pensar como modelar los IDs de las razas de perros en la base de datos. Existen distintas formas correctas de hacerlo pero tener en cuenta que cuando hagamos click en alguna, esta puede provenir de la API o de la Base de Datos por lo que cuando muestre su detalle no debería haber ambigüedad en cual se debería mostrar. Por ejemplo si en la API la raza `Pug` tiene id = 1 y en nuestra base de datos creamos una nueva raza `Henry Pug` con id = 1, ver la forma de diferenciarlas cuando querramos acceder al detalle de la misma.
 
 #### Backend
 
