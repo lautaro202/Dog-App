@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -9,6 +9,8 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Pagination from '@material-ui/lab/Pagination';
+import {useDispatch, useSelector} from 'react-redux'
+import {getDogs} from '../Redux/actions'
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -60,7 +62,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getDogs())
+  }, [])
 
+  const dog = useSelector((state) => state.dogs);
+  if (Object.keys(dog).length === 0) return <div className={classes.blogTitle}>Loading...</div>;
+
+  
   return (
     <div className="App">
       <Box className={classes.hero}>
@@ -71,30 +81,37 @@ export default function Home() {
           Breeds
         </Typography>
         <Grid item xs={12} sm={6} md={4}>
-            <Card className={classes.card}>
-              <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.spirit-animals.com%2Fwp-content%2Fuploads%2F2013%2F08%2FRottweiler-7.jpg&f=1&nofb=1"
-                  title="Contemplative Reptile"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    RottWeiler
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                  A male Rottweiler will stand anywhere from 24 to 27 muscular inches at the shoulder; females run a bit smaller and lighter. The glistening, short black coat with smart rust markings add to the picture of imposing strength. A thickly muscled hindquarters powers the Rottie’s effortless trotting gait.
-
-
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
+          {!dog ? <div>No existen perros</div> : null}
+          {dog && dog.map((dogs) => {
+            return(
+              <Grid>
+                <Grid item >
+                <Card style={{alignItems:'center', display:'flex'}} >
+                        <CardActionArea>
+                          <CardMedia
+                            className={classes.media}
+                            image={dogs.img}
+                            title="Contemplative Reptile"
+                            />
+                          <CardContent>
+                            <Typography gutterBottom variant="h5" component="h2">
+                              {dogs.name}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                              {dogs.temperament}
+                            </Typography>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+            </Grid> 
+          </Grid>
+            )
+          })}
           </Grid>
         <Box my={4} className={classes.paginationContainer}>
           <Pagination count={10} />
         </Box>
       </Container>
-    </div>
-  );
+      </div>
+      );
 }
