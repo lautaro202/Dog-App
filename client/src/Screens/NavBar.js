@@ -6,16 +6,20 @@ import Container from "@material-ui/core/Container";
 import AppBar from "@material-ui/core/AppBar";
 import ToolBar from "@material-ui/core/Toolbar";
 import InputBase from "@material-ui/core/InputBase";
+import {Link} from 'react-router-dom'
 export default function Home() {
   const classes = useStyles();
-
+  const user = localStorage.getItem('userName')
+  const logOut = (e) => {
+    localStorage.removeItem('userName')
+    window.location.reload()
+  }
   return (
     <Container>
+      {console.log(user)}
       <AppBar>
         <ToolBar variant="dense">
-          <div className='welcome'>
-            Welcome!
-          </div>
+          {!user ? <Link style={{textDecoration:'none', color:'white'}} to='/'>Welcome!</Link> :  <Link style={{textDecoration:'none', color:'white'}} to='/'>Welcome! {user}</Link> }
           <InputBase
             classes={{
               root: classes.inputRoot,
@@ -23,9 +27,7 @@ export default function Home() {
             }}
             placeholder="Search a Breed!"
           ></InputBase>
-          <Button className='welcome' style={{textDecoration:'none', color:'white'}}>
-              Login
-          </Button>
+              {!user ? <Link  style={{textDecoration:'none', color:'white'}} to='/login'>Login</Link> : <Button onClick={logOut}>Logout</Button> }
         </ToolBar>
       </AppBar>
     </Container>

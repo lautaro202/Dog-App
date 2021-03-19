@@ -1,17 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import NavBar from './NavBar'
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import Avatar from '@material-ui/core/Avatar';
-import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import Pagination from '@material-ui/lab/Pagination';
 
 const useStyles = makeStyles((theme) => ({
@@ -67,7 +63,6 @@ export default function Home() {
 
   return (
     <div className="App">
-        <NavBar />
       <Box className={classes.hero}>
         <Box>PuppyPedia</Box>
       </Box>
