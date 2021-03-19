@@ -1,20 +1,17 @@
-import React, {useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import Pagination from '@material-ui/lab/Pagination';
-import {useDispatch, useSelector} from 'react-redux'
-import {getDogs} from '../Redux/actions'
+import React, { useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import Dog from "./DogCard";
+import Pagination from "@material-ui/lab/Pagination";
+import { useDispatch, useSelector } from "react-redux";
+import { getDogs } from "../Redux/actions";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   hero: {
     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://free4kwallpapers.com/uploads/originals/2020/05/09/puppy-dog-wallpaper.jpg')`,
@@ -30,47 +27,49 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "4rem",
     [theme.breakpoints.down("sm")]: {
       height: 300,
-      fontSize: "3em"
-    }
+      fontSize: "3em",
+    },
   },
   blogsContainer: {
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
   },
   blogTitle: {
     fontWeight: 800,
-    paddingBottom: theme.spacing(3)
+    paddingBottom: theme.spacing(3),
   },
   card: {
     maxWidth: "100%",
   },
   media: {
-    height: 240
+    height: 240,
   },
   cardActions: {
     display: "flex",
     margin: "0 10px",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   author: {
-    display: "flex"
+    display: "flex",
   },
   paginationContainer: {
     display: "flex",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 }));
 
 export default function Home() {
   const classes = useStyles();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getDogs())
-  }, [])
+    dispatch(getDogs());
+  }, []);
 
   const dog = useSelector((state) => state.dogs);
-  if (Object.keys(dog).length === 0) return <div className={classes.blogTitle}>Loading...</div>;
+  if (Object.keys(dog).length === 0)
+    return (
+      <div style={{ marginTop: 100, textAlign: "center" }}>No Puppies!</div>
+    );
 
-  
   return (
     <div className="App">
       <Box className={classes.hero}>
@@ -82,36 +81,27 @@ export default function Home() {
         </Typography>
         <Grid item xs={12} sm={6} md={4}>
           {!dog ? <div>No existen perros</div> : null}
-          {dog && dog.map((dogs) => {
-            return(
-              <Grid>
-                <Grid item >
-                <Card style={{alignItems:'center', display:'flex'}} >
-                        <CardActionArea>
-                          <CardMedia
-                            className={classes.media}
-                            image={dogs.img}
-                            title="Contemplative Reptile"
-                            />
-                          <CardContent>
-                            <Typography gutterBottom variant="h5" component="h2">
-                              {dogs.name}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                              {dogs.temperament}
-                            </Typography>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-            </Grid> 
-          </Grid>
-            )
-          })}
-          </Grid>
+          {dog &&
+            dog.map((dogs) => {
+              return (
+                <Grid>
+                  <Grid item>
+                    <Dog
+                      key={dogs.id}
+                      id={dogs.id}
+                      name={dogs.name}
+                      temperament={dogs.temperament}
+                      img={dogs.img}
+                    ></Dog>
+                  </Grid>
+                </Grid>
+              );
+            })}
+        </Grid>
         <Box my={4} className={classes.paginationContainer}>
           <Pagination count={10} />
         </Box>
       </Container>
-      </div>
-      );
+    </div>
+  );
 }

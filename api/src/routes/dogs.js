@@ -1,68 +1,164 @@
-const axios = require("axios")
-const app = require('express').Router()
-const { Dog, Temperament } = require('../db');
-const {
-    YOUR_API_KEY
-  } = process.env;
+const { Router } = require("express");
+const { Dog, Temperament } = require("../db.js");
 
+// Importar todos los routers;
+// Ejemplo: const authRouter = require('./auth.js');
+const { YOUR_API_KEY } = process.env;
 
-  function filtro(arr,value){    
-    var a = arr.filter(element=>{
-        return element.name.toLowerCase().includes(value.toLowerCase()) || (element.temperament && element.temperament.toLowerCase().includes(value.toLowerCase()))    
-    })
-     return a
-}
+const fetch = require("node-fetch");
 
-  function parserArray (array){
-    let string = "";
-    array.forEach(element => {
-        return string += `${element.name}, `	
-    });
-    return string.substring(0, string.length - 2);
-}
-// - Obtener un listado de las primeras 8 razas de perro
-// - Debe devolver solo los datos necesarios para la ruta principal
-app.get('/dogs' , (req, res) => {
-    Promise.all([axios.get(`https://api.thedogapi.com/v1/breeds?api_key=${YOUR_API_KEY}`),
-    Dog.findAll({
-      include:{
-        model:Temperament
-      },
-    })])   
-    .then(resp => {
-        var principal_caract = [];
-        resp[0].data.forEach(element => {
-            var datos_key = {
-                id : element.id,
-                name: element.name,
-                img: element.image.url,
-                temperament: element.temperament,
-                weight: element.weight.metric
-            }
-            principal_caract.push(datos_key)
-        })
-        resp[1].forEach(element => {
-            var datos_key = {
-                id: element.id,
-                name: element.name,
-                temperament: parserArray(element.temperament),
-                img: element.img
-            }
-            principal_caract.push(datos_key)
-        })
-        if(req.query.name){
-            var filterByName = filtro(principal_caract,req.query.name)
-           
-            return res.json(filterByName)
+const app = Router();
+
+// Configurar los routers
+// Ejemplo: router.use('/auth', authRouter);
+
+app.get("/dogs", async function (req, res) {
+  var { name } = req.query;
+  if (name) {
+    fetch(`https://api.thedogapi.com/v1/breeds/search?q=${name}`)
+      .then((data) => data.json())
+      .then(async (json) => {
+        let raza = await Dog.findAll({
+          include: [
+            {
+              model: Temperament,
+              required: true,
+            },
+          ],
+        });
+
+        raza.forEach((dato) => {
+          if (dato.dataValues.name.includes(name)) {
+            let temperament = dato.dataValues.temperamentos.map((temp) => {
+              return temp.dataValues.nameT;
+            });
+            dato.dataValues.temperamentos = temperament[0];
+            json.push(dato.dataValues);
           }
-           return res.json(principal_caract)
-          
-            }) 
-    .catch(err => {
-        console.log(err)
+        });
+
+        if (json.length > 0) {
+          let razaEnc = [];
+
+          for (let i = 0; i < json.length; i++) {
+            let raza1 = {
+              id: json[i].id,
+              name: json[i].name,
+              img:
+                `https://cdn2.thedogapi.com/images/${json[i].reference_image_id}.jpg` ||
+                "https://us.123rf.com/450wm/bestpetphotos/bestpetphotos1712/bestpetphotos171200177/91448764-perrito-dogloval-triste-lindo-del-perro-del-perro-de-aguas-de-rey-charles-en-fondo-blanco-aislado-de.jpg?ver=6",
+              temperament: json[i].temperament || json[i].temperamentos,
+            };
+            razaEnc.push(raza1);
+          }
+          res.json(razaEnc);
+        }
+      });
+  } else {
+    fetch(`https://api.thedogapi.com/v1/breeds/?api_key=${YOUR_API_KEY}`)
+      .then((data) => data.json())
+      .then(async (json) => {
+        let razasCr = await Dog.findAll({
+          include: Temperament,
+        });
+
+        razasCr.forEach((dato) => {
+          let temperament = dato.dataValues.temperamentos.map((temp) => {
+            return temp.dataValues.nameT;
+          });
+          dato.dataValues.temperamentos = temperament[0];
+          json.push(dato.dataValues);
+        });
+
+        let raza2 = json.map((dato) => {
+          return {
+            id: dato.id,
+            img:
+              (dato.image && dato.image.url) ||
+              "https://us.123rf.com/450wm/bestpetphotos/bestpetphotos1712/bestpetphotos171200177/91448764-perrito-dogloval-triste-lindo-del-perro-del-perro-de-aguas-de-rey-charles-en-fondo-blanco-aislado-de.jpg?ver=6",
+            name: dato.name,
+            temperament: dato.temperament || dato.temperamentos,
+          };
+        });
+
+        raza2.sort((a, b) => (a.name > b.name ? 1 : -1));
+
+        res.json(raza2);
+      });
+  }
+});
+///////////////////////////////////////////////////////////////////////////////
+
+app.get("/dogs/:idRaza", async function (req, res) {
+  var { idRaza } = req.params;
+  fetch(`https://api.thedogapi.com/v1/breeds/?api_key=${YOUR_API_KEY}`)
+    .then((data) => data.json())
+    .then(async (json) => {
+      let raza = json.find((dato) => dato.id === parseInt(idRaza));
+      if (raza) {
+        return res.json({
+          img:
+            (raza.image && raza.image.url) ||
+            "https://us.123rf.com/450wm/bestpetphotos/bestpetphotos1712/bestpetphotos171200177/91448764-perrito-dogloval-triste-lindo-del-perro-del-perro-de-aguas-de-rey-charles-en-fondo-blanco-aislado-de.jpg?ver=6",
+          name: raza.name || "No Encontrado",
+          temperament:
+            raza.temperament || raza.temperamentos || "No Encontrado",
+          weight: raza.weight.metric || "No Encontrado",
+          height: raza.height.metric || "No Encontrado",
+          life_span: raza.life_span || "No Encontrado",
+        });
+      } else {
+        let razaC = await Dog.findAll({
+          include: [
+            {
+              model: Temperament,
+              required: true,
+            },
+          ],
+        });
+
+        let creadaR = razaC.find(
+          (dato) => dato.dataValues.id === parseInt(idRaza)
+        );
+        if (creadaR) {
+          return res.json({
+            img:
+              creadaR.dataValues.img ||
+              "https://us.123rf.com/450wm/bestpetphotos/bestpetphotos1712/bestpetphotos171200177/91448764-perrito-dogloval-triste-lindo-del-perro-del-perro-de-aguas-de-rey-charles-en-fondo-blanco-aislado-de.jpg?ver=6",
+            name: creadaR.dataValues.name || "No Encontrado",
+            temperament:
+              creadaR.dataValues.temperamentos[0].nameT || "No Encontrado",
+            weight: creadaR.dataValues.weight || "No Encontrado",
+            height: creadaR.dataValues.height || "No Encontrado",
+            life_span: creadaR.dataValues.life_span || "No Encontrado",
+          });
+        }
+        return res.status(404).json({ message: "No Encontrado" });
+      }
     })
-})
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
-  
+//Creacion de un perro
 
-module.exports = app
+let idRaza = 300; //id Seguro de no chocar con los de la API
+app.post("/dogs", async function (req, res) {
+  const { name, height, weight, years, nameT, sexo } = req.body;
+  try {
+    let newRaza = await Dog.create({
+      id: idRaza++,
+      name,
+      height,
+      weight,
+      years,
+      sexo,
+    });
+    await newRaza.setTemperamentos(nameT);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+module.exports = app;
