@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./css/NavBar.css";
+import "./css/NavBar.scss";
 import { useDispatch } from "react-redux";
 import { getDogsByBreed } from "../Redux/actions";
 import { makeStyles } from "@material-ui/core/styles";
@@ -7,7 +7,6 @@ import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import AppBar from "@material-ui/core/AppBar";
 import ToolBar from "@material-ui/core/Toolbar";
-import InputBase from "@material-ui/core/InputBase";
 import { Link } from "react-router-dom";
 export default function Home() {
   const [input, setInput] = useState("");
@@ -43,10 +42,15 @@ export default function Home() {
               Welcome! {user}
             </Link>
           )}
-          <form onSubmit={(e) => searchDogs(e)} className={classes.inputInput}>
+          <form
+            onSubmit={(e) => searchDogs(e)}
+            style={{ margin: "auto", width: 600 }}
+            className="searchbar"
+          >
             <div className="search__container">
               <p className="search__title"></p>
               <input
+                style={{ margin: 0, position: "relative", top: -15 }}
                 onChange={handleChange}
                 onSubmit={searchDogs}
                 className="search__input"

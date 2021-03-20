@@ -2,61 +2,36 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
+
 export default function DogCard(dogs) {
   const classes = useStyles();
-
+  console.log(dogs.name);
   return (
-    <Card
-      style={{
-        alignItems: "center",
-        display: "flex",
-        justifyContent: "center",
-      }}
-    >
-      <Link to={`/dogs/${dogs.id}`}></Link>
-      <CardActionArea>
-        <div>
-          {dogs.id ? (
-            <Link
-              style={{ textDecoration: "none", color: "black" }}
-              to={`/dogs/${dogs.id}`}
-            >
-              <Typography
-                style={{ textDecoration: "none" }}
-                gutterBottom
-                variant="h5"
-                component="h2"
-              >
-                {dogs.name}
-              </Typography>{" "}
-            </Link>
-          ) : (
-            <Link
-              onClick={() => {
-                return window.location.reload();
-              }}
-            >
-              <h5>{dogs.name}</h5>
-            </Link>
-          )}
-        </div>
+    <Grid xs={12} sm={6} md={4}>
+      <Card className={classes.card}>
         <CardMedia
-          className={classes.media}
+          className={classes.cardMedia}
           image={dogs.img}
-          title="Contemplative Reptile"
-        ></CardMedia>
-        <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {dogs.temperament}
+          title="Image title"
+        />
+        <CardContent className={classes.cardContent}>
+          <Typography gutterBottom variant="h5" component="h2">
+            <Link
+              to={`/dogs/${dogs.id}`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              {dogs.name}
+            </Link>
           </Typography>
+          <Typography>{dogs.temperament}</Typography>
         </CardContent>
-      </CardActionArea>
-    </Card>
+      </Card>
+    </Grid>
   );
 }
 
@@ -88,8 +63,20 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 800,
     paddingBottom: theme.spacing(3),
   },
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
   card: {
-    maxWidth: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+  },
+  cardMedia: {
+    paddingTop: "56.25%", // 16:9
+  },
+  cardContent: {
+    flexGrow: 1,
   },
   media: {
     height: 240,

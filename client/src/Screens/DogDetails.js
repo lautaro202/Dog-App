@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function DogDetails(props) {
   const dispatch = useDispatch();
-  console.log(props.match.params.id);
+  const id = props.match.params.id;
   useEffect(() => {
-    dispatch(getDogsById(props.match.params.id));
+    dispatch(getDogsById(id));
   }, []);
   const dog = useSelector((state) => state.dogID);
   if (Object.keys(dog).length === 0)

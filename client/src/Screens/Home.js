@@ -8,7 +8,6 @@ import Dog from "./DogCard";
 import Pagination from "@material-ui/lab/Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { getDogs } from "../Redux/actions";
-
 const useStyles = makeStyles((theme) => ({
   appBar: {
     backgroundColor: "#fff",
@@ -79,25 +78,21 @@ export default function Home() {
         <Typography variant="h4" className={classes.blogTitle}>
           Breeds
         </Typography>
-        <Grid item xs={12} sm={6} md={4}>
-          {!dog ? <div>No existen perros</div> : null}
-          {dog &&
-            dog.map((dogs) => {
-              return (
-                <Grid>
-                  <Grid item>
-                    <Dog
-                      key={dogs.id}
-                      id={dogs.id}
-                      name={dogs.name}
-                      temperament={dogs.temperament}
-                      img={dogs.img}
-                    ></Dog>
-                  </Grid>
-                </Grid>
-              );
-            })}
-        </Grid>
+        {!dog ? <div>No existen perros</div> : null}
+        <Container className={classes.cardGrid} maxWidth="md">
+          {/* End hero unit */}
+          <Grid container spacing={4}>
+            {dog.map((dogs) => (
+              <Dog
+                key={dogs.id}
+                id={dogs.id}
+                name={dogs.name}
+                temperament={dogs.temperament}
+                img={dogs.img}
+              ></Dog>
+            ))}
+          </Grid>
+        </Container>
         <Box my={4} className={classes.paginationContainer}>
           <Pagination count={10} />
         </Box>
