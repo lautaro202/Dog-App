@@ -18,7 +18,7 @@ app.get("/dogs", async function (req, res) {
     fetch(`https://api.thedogapi.com/v1/breeds/search?q=${name}`)
       .then((data) => data.json())
       .then(async (json) => {
-        let raza = await Dog.findAll({
+        let breed = await Dog.findAll({
           include: [
             {
               model: Temperament,
@@ -27,7 +27,7 @@ app.get("/dogs", async function (req, res) {
           ],
         });
 
-        raza.forEach((dato) => {
+        breed.forEach((dato) => {
           if (dato.dataValues.name.includes(name)) {
             let temperament = dato.dataValues.temperamentos.map((temp) => {
               return temp.dataValues.nameT;
@@ -89,23 +89,23 @@ app.get("/dogs", async function (req, res) {
 });
 ///////////////////////////////////////////////////////////////////////////////
 
-app.get("/dogs/:idRaza", async function (req, res) {
-  var { idRaza } = req.params;
+app.get("/dogs/:idBreed", async function (req, res) {
+  var { idBreed } = req.params;
   fetch(`https://api.thedogapi.com/v1/breeds/?api_key=${YOUR_API_KEY}`)
     .then((data) => data.json())
     .then(async (json) => {
-      let raza = json.find((dato) => dato.id === parseInt(idRaza));
-      if (raza) {
+      let breed = json.find((dato) => dato.id === parseInt(idBreed));
+      if (breed) {
         return res.json({
           img:
-            (raza.image && raza.image.url) ||
+            (breed.image && breed.image.url) ||
             "https://us.123rf.com/450wm/bestpetphotos/bestpetphotos1712/bestpetphotos171200177/91448764-perrito-dogloval-triste-lindo-del-perro-del-perro-de-aguas-de-rey-charles-en-fondo-blanco-aislado-de.jpg?ver=6",
-          name: raza.name || "No Encontrado",
+          name: breed.name || "No Encontrado",
           temperament:
-            raza.temperament || raza.temperamentos || "No Encontrado",
-          weight: raza.weight.metric || "No Encontrado",
-          height: raza.height.metric || "No Encontrado",
-          life_span: raza.life_span || "No Encontrado",
+            breed.temperament || breed.temperamentos || "No Encontrado",
+          weight: breed.weight.metric || "No Encontrado",
+          height: breed.height.metric || "No Encontrado",
+          life_span: breed.life_span || "No Encontrado",
         });
       } else {
         let razaC = await Dog.findAll({
@@ -118,7 +118,7 @@ app.get("/dogs/:idRaza", async function (req, res) {
         });
 
         let creadaR = razaC.find(
-          (dato) => dato.dataValues.id === parseInt(idRaza)
+          (dato) => dato.dataValues.id === parseInt(idBreed)
         );
         if (creadaR) {
           return res.json({
@@ -143,21 +143,20 @@ app.get("/dogs/:idRaza", async function (req, res) {
 
 //Creacion de un perro
 
-let idRaza = 300; //id Seguro de no chocar con los de la API
-app.post("/dogs", async function (req, res) {
-  const { name, height, weight, years, nameT, sexo } = req.body;
-  try {
-    let newRaza = await Dog.create({
-      id: idRaza++,
+let idDog = 200;
+app.post("/dogs", async (req, res) => {
+  if (req.body) {
+    idDog++;
+    const { name, height, weight, lifespan, image } = req.body;
+    const dog = await Dog.create({
+      id: idDog,
       name,
       height,
       weight,
-      years,
-      sexo,
+      lifespan,
+      image,
     });
-    await newRaza.setTemperamentos(nameT);
-  } catch (error) {
-    res.status(500).send(error);
+    return res.json(dog);
   }
 });
 

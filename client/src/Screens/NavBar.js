@@ -31,7 +31,7 @@ export default function Home() {
 
   return (
     <Container>
-      <AppBar>
+      <AppBar style={{ height: 80 }}>
         <ToolBar variant="dense">
           {!user ? (
             <Link style={{ textDecoration: "none", color: "white" }} to="/">
@@ -68,7 +68,7 @@ export default function Home() {
             </Link>
           ) : (
             <Button
-              style={{ textDecoration: "none", color: "white" }}
+              style={{ textDecoration: "none", color: "white", marginTop: 10 }}
               onClick={logOut}
             >
               Logout
