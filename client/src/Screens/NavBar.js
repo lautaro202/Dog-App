@@ -13,8 +13,11 @@ export default function Home() {
   const dispatch = useDispatch();
   const classes = useStyles();
   const user = localStorage.getItem("userName");
+  const email = localStorage.getItem("emailUser");
+
   const logOut = (e) => {
     localStorage.removeItem("userName");
+    localStorage.removeItem("emailUser");
     window.location.reload();
   };
 
@@ -31,15 +34,20 @@ export default function Home() {
 
   return (
     <Container>
+      {console.log(email)}
       <AppBar style={{ height: 80 }}>
         <ToolBar variant="dense">
           {!user ? (
             <Link style={{ textDecoration: "none", color: "white" }} to="/">
-              Welcome!
+              Welcome {user}
             </Link>
           ) : (
             <Link style={{ textDecoration: "none", color: "white" }} to="/">
-              Welcome! {user}
+              {email === "lautaropaez308@gmail.com" ? (
+                <div>admin {email}</div>
+              ) : (
+                <div>Welcome {user}</div>
+              )}{" "}
             </Link>
           )}
           <form
@@ -59,6 +67,14 @@ export default function Home() {
               />
             </div>
           </form>
+          {email === "lautaropaez308@gmail.com" ? (
+            <Link
+              style={{ textDecoration: "none", color: "black" }}
+              to="/addog"
+            >
+              create dog
+            </Link>
+          ) : null}{" "}
           {!user ? (
             <Link
               style={{ textDecoration: "none", color: "white" }}

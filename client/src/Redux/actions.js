@@ -7,6 +7,7 @@ export function getDogs() {
       .get(`http://localhost:3001/dogs`)
       .then((res) => res.data)
       .then((data) => {
+        console.log(data);
         dispatch({ type: GET_DOGS, payload: data });
       })
       .catch(() =>
@@ -17,6 +18,7 @@ export function getDogs() {
 
 export function getDogsByBreed(query) {
   return function (dispatch) {
+    console.log("hola");
     axios
       .get(`http://localhost:3001/dogs?name=${query}`)
       .then((res) => res.data)

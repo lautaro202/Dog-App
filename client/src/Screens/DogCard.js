@@ -10,7 +10,6 @@ import Grid from "@material-ui/core/Grid";
 
 export default function DogCard(dogs) {
   const classes = useStyles();
-  console.log(dogs.name);
   return (
     <Grid xs={12} sm={6} md={4}>
       <Card className={classes.card}>

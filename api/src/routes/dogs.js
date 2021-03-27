@@ -7,12 +7,40 @@ const { YOUR_API_KEY } = process.env;
 
 const fetch = require("node-fetch");
 
-const app = Router();
+const router = Router();
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 
-app.get("/dogs", async function (req, res) {
+//------------------------------------------------------------
+let idDog = 300;
+router.post("/dogs", async (req, res) => {
+  if (req.body) {
+    idDog++;
+    const { name, height, weight, lifespan, tempes } = req.body;
+    const dog = await Dog.create({
+      id: idDog,
+      name,
+      height,
+      weight,
+      lifespan,
+      img: "http://localhost:3000/static/media/india.a29799b7.png",
+    });
+    if (tempes) {
+      tempes.map(async (t) => {
+        const temperament = await Temperament.findAll({
+          where: { name: t },
+        });
+        dog.addTemperament(temperament);
+      });
+      return res.json(dog);
+    }
+    return res.json(dog);
+  }
+});
+///////////////////////////////////////////////////////////////////////////////
+
+router.get("/dogs", async function (req, res) {
   var { name } = req.query;
   if (name) {
     fetch(`https://api.thedogapi.com/v1/breeds/search?q=${name}`)
@@ -22,142 +50,156 @@ app.get("/dogs", async function (req, res) {
           include: [
             {
               model: Temperament,
-              required: true,
+              // required: true,
             },
           ],
         });
 
         breed.forEach((dato) => {
           if (dato.dataValues.name.includes(name)) {
-            let temperament = dato.dataValues.temperamentos.map((temp) => {
-              return temp.dataValues.nameT;
+            let temperament = dato.dataValues.temperament.map((temp) => {
+              return temp.dataValues.name;
             });
-            dato.dataValues.temperamentos = temperament[0];
+            dato.dataValues.temperament = temperament[0];
             json.push(dato.dataValues);
           }
         });
 
         if (json.length > 0) {
-          let razaEnc = [];
+          let crBreed = [];
 
           for (let i = 0; i < json.length; i++) {
-            let raza1 = {
+            let breedReference = {
               id: json[i].id,
               name: json[i].name,
               img:
                 `https://cdn2.thedogapi.com/images/${json[i].reference_image_id}.jpg` ||
-                "https://us.123rf.com/450wm/bestpetphotos/bestpetphotos1712/bestpetphotos171200177/91448764-perrito-dogloval-triste-lindo-del-perro-del-perro-de-aguas-de-rey-charles-en-fondo-blanco-aislado-de.jpg?ver=6",
+                "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fashionghana.com%2Fwp-content%2Fuploads%2F2016%2F07%2Fbodhi.jpg&f=1&nofb=1",
               temperament: json[i].temperament || json[i].temperamentos,
             };
-            razaEnc.push(raza1);
+            crBreed.push(breedReference);
           }
-          res.json(razaEnc);
+          res.json(crBreed);
         }
       });
   } else {
     fetch(`https://api.thedogapi.com/v1/breeds/?api_key=${YOUR_API_KEY}`)
       .then((data) => data.json())
       .then(async (json) => {
-        let razasCr = await Dog.findAll({
+        let DogCr = await Dog.findAll({
           include: Temperament,
         });
 
-        razasCr.forEach((dato) => {
-          let temperament = dato.dataValues.temperamentos.map((temp) => {
-            return temp.dataValues.nameT;
+        console.log(DogCr);
+        DogCr.forEach((dato) => {
+          let temperament = dato.dataValues.temperaments.map((temp) => {
+            return temp.dataValues.name;
           });
-          dato.dataValues.temperamentos = temperament[0];
+          dato.dataValues.temperaments = temperament[0];
           json.push(dato.dataValues);
         });
 
-        let raza2 = json.map((dato) => {
+        let breedReference2 = json.map((data) => {
           return {
-            id: dato.id,
+            id: data.id,
             img:
-              (dato.image && dato.image.url) ||
-              "https://us.123rf.com/450wm/bestpetphotos/bestpetphotos1712/bestpetphotos171200177/91448764-perrito-dogloval-triste-lindo-del-perro-del-perro-de-aguas-de-rey-charles-en-fondo-blanco-aislado-de.jpg?ver=6",
-            name: dato.name,
-            temperament: dato.temperament || dato.temperamentos,
+              (data.image && data.image.url) ||
+              "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fashionghana.com%2Fwp-content%2Fuploads%2F2016%2F07%2Fbodhi.jpg&f=1&nofb=1",
+            name: data.name,
+            temperament: data.temperament || data.temperamentos,
           };
         });
 
-        raza2.sort((a, b) => (a.name > b.name ? 1 : -1));
+        breedReference2.sort((a, b) => (a.name > b.name ? 1 : -1));
 
-        res.json(raza2);
+        res.json(breedReference2);
       });
   }
 });
 ///////////////////////////////////////////////////////////////////////////////
 
-app.get("/dogs/:idBreed", async function (req, res) {
+router.get("/dogs/:idBreed", async function (req, res) {
   var { idBreed } = req.params;
   fetch(`https://api.thedogapi.com/v1/breeds/?api_key=${YOUR_API_KEY}`)
     .then((data) => data.json())
     .then(async (json) => {
       let breed = json.find((dato) => dato.id === parseInt(idBreed));
+      console.log("breed", breed);
       if (breed) {
         return res.json({
           img:
             (breed.image && breed.image.url) ||
-            "https://us.123rf.com/450wm/bestpetphotos/bestpetphotos1712/bestpetphotos171200177/91448764-perrito-dogloval-triste-lindo-del-perro-del-perro-de-aguas-de-rey-charles-en-fondo-blanco-aislado-de.jpg?ver=6",
-          name: breed.name || "No Encontrado",
-          temperament:
-            breed.temperament || breed.temperamentos || "No Encontrado",
-          weight: breed.weight.metric || "No Encontrado",
-          height: breed.height.metric || "No Encontrado",
-          life_span: breed.life_span || "No Encontrado",
+            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fashionghana.com%2Fwp-content%2Fuploads%2F2016%2F07%2Fbodhi.jpg&f=1&nofb=1",
+          name: breed.name || "error",
+          temperament: breed.temperament || breed.temperamentos || "error",
+          weight: breed.weight.metric || "error",
+          height: breed.height.metric || "error",
+          life_span: breed.life_span || "error",
         });
       } else {
-        let razaC = await Dog.findAll({
+        let createDog = await Dog.findAll({
           include: [
             {
               model: Temperament,
-              required: true,
             },
           ],
         });
-
-        let creadaR = razaC.find(
+        console.log("dog", createDog);
+        let createDoggy = createDog.find(
           (dato) => dato.dataValues.id === parseInt(idBreed)
         );
-        if (creadaR) {
+        if (createDoggy) {
           return res.json({
             img:
-              creadaR.dataValues.img ||
-              "https://us.123rf.com/450wm/bestpetphotos/bestpetphotos1712/bestpetphotos171200177/91448764-perrito-dogloval-triste-lindo-del-perro-del-perro-de-aguas-de-rey-charles-en-fondo-blanco-aislado-de.jpg?ver=6",
-            name: creadaR.dataValues.name || "No Encontrado",
-            temperament:
-              creadaR.dataValues.temperamentos[0].nameT || "No Encontrado",
-            weight: creadaR.dataValues.weight || "No Encontrado",
-            height: creadaR.dataValues.height || "No Encontrado",
-            life_span: creadaR.dataValues.life_span || "No Encontrado",
+              createDoggy.dataValues.img ||
+              "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fashionghana.com%2Fwp-content%2Fuploads%2F2016%2F07%2Fbodhi.jpg&f=1&nofb=1",
+            name: createDoggy.dataValues.name || "No Encontrado",
+            // temperament:
+            //   // createDoggy.dataValues.temperament[0].name || "No Encontrado",
+            weight: createDoggy.dataValues.weight || "No Encontrado",
+            height: createDoggy.dataValues.height || "No Encontrado",
+            life_span: createDoggy.dataValues.life_span || "No Encontrado",
           });
         }
+        console.log(createDog);
         return res.status(404).json({ message: "No Encontrado" });
       }
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
+      return;
     });
 });
 
-//Creacion de un perro
+///////////////////////////////////////////////////////////////////////////////
 
-let idDog = 200;
-app.post("/dogs", async (req, res) => {
-  if (req.body) {
-    idDog++;
-    const { name, height, weight, lifespan, image } = req.body;
-    const dog = await Dog.create({
-      id: idDog,
-      name,
-      height,
-      weight,
-      lifespan,
-      image,
+let temp = [];
+fetch(`https://api.thedogapi.com/v1/breeds/?api_key=${YOUR_API_KEY}`)
+  .then((response) => response.json())
+  .then((json) => {
+    json?.forEach((b) => {
+      let temps = b.temperament?.split(", ");
+      temps?.forEach((t) => {
+        if (!temp.find((tp) => tp.name === t)) {
+          temp.push({ name: t });
+        }
+      });
     });
-    return res.json(dog);
-  }
-});
+  })
+  .then(() => {
+    temp.forEach((t) => {
+      Temperament.findOrCreate({
+        where: {
+          name: t.name,
+        },
+      });
+    });
+  })
+  .catch((err) => console.error(err));
 
-module.exports = app;
+router.get("/temperament", async function (req, res) {
+  await Temperament.findAll().then((result) => res.json(result));
+});
+///////////////////////////////////////////////////////////////////////////////
+
+module.exports = router;

@@ -69,6 +69,7 @@ export default function Home() {
       <div style={{ marginTop: 100, textAlign: "center" }}>No Puppies!</div>
     );
 
+  console.log(dog);
   return (
     <div className="App">
       <Box className={classes.hero}>
