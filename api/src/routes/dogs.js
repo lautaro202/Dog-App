@@ -54,7 +54,7 @@ router.get("/dogs", async function (req, res) {
             },
           ],
         });
-
+        let perrote = await Dog.findAll();
         breed.forEach((dato) => {
           if (dato.dataValues.name.includes(name)) {
             let temperament = dato.dataValues.temperament.map((temp) => {
@@ -90,7 +90,6 @@ router.get("/dogs", async function (req, res) {
           include: Temperament,
         });
 
-        console.log(DogCr);
         DogCr.forEach((dato) => {
           let temperament = dato.dataValues.temperaments.map((temp) => {
             return temp.dataValues.name;
@@ -124,7 +123,6 @@ router.get("/dogs/:idBreed", async function (req, res) {
     .then((data) => data.json())
     .then(async (json) => {
       let breed = json.find((dato) => dato.id === parseInt(idBreed));
-      console.log("breed", breed);
       if (breed) {
         return res.json({
           img:
@@ -134,7 +132,7 @@ router.get("/dogs/:idBreed", async function (req, res) {
           temperament: breed.temperament || breed.temperamentos || "error",
           weight: breed.weight.metric || "error",
           height: breed.height.metric || "error",
-          life_span: breed.life_span || "error",
+          lifespan: breed.lifespan || "error",
         });
       } else {
         let createDog = await Dog.findAll({
@@ -144,7 +142,6 @@ router.get("/dogs/:idBreed", async function (req, res) {
             },
           ],
         });
-        console.log("dog", createDog);
         let createDoggy = createDog.find(
           (dato) => dato.dataValues.id === parseInt(idBreed)
         );
@@ -153,16 +150,15 @@ router.get("/dogs/:idBreed", async function (req, res) {
             img:
               createDoggy.dataValues.img ||
               "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fashionghana.com%2Fwp-content%2Fuploads%2F2016%2F07%2Fbodhi.jpg&f=1&nofb=1",
-            name: createDoggy.dataValues.name || "No Encontrado",
+            name: createDoggy.dataValues.name || " error",
             // temperament:
-            //   // createDoggy.dataValues.temperament[0].name || "No Encontrado",
-            weight: createDoggy.dataValues.weight || "No Encontrado",
-            height: createDoggy.dataValues.height || "No Encontrado",
-            life_span: createDoggy.dataValues.life_span || "No Encontrado",
+            //   // createDoggy.dataValues.temperament[0].name || " error",
+            weight: createDoggy.dataValues.weight || " error",
+            height: createDoggy.dataValues.height || "No Enerrcontrado",
+            lifespan: createDoggy.dataValues.lifespan || " error",
           });
         }
-        console.log(createDog);
-        return res.status(404).json({ message: "No Encontrado" });
+        return res.status(404).json({ message: " error" });
       }
     })
     .catch((err) => {

@@ -1,5 +1,10 @@
 import axios from "axios";
-import { GET_DOGS, GET_DOGS_BY_NAME, GET_DOGS_BY_ID } from "./constants";
+import {
+  GET_DOGS,
+  GET_DOGS_BY_NAME,
+  GET_DOGS_BY_ID,
+  GET_TEMPERAMENTS,
+} from "./constants";
 import swal from "sweetalert";
 export function getDogs() {
   return function (dispatch) {
@@ -11,7 +16,11 @@ export function getDogs() {
         dispatch({ type: GET_DOGS, payload: data });
       })
       .catch(() =>
-        swal("Oops", "Hubo un error, por favor intentelo mas tarde!", "error")
+        swal(
+          "Oops",
+          "Se nos escaparon los perritos, por favor intentelo mas tarde!",
+          "error"
+        )
       );
   };
 }
@@ -27,7 +36,29 @@ export function getDogsByBreed(query) {
         dispatch({ type: GET_DOGS_BY_NAME, payload: data });
       })
       .catch(() =>
-        swal("Oops", "Hubo un error, por favor intentelo mas tarde!", "error")
+        swal(
+          "Oops",
+          "Hubo un error buscando a los perritos, por favor intentelo mas tarde!",
+          "error"
+        )
+      );
+  };
+}
+
+export function getTemperaments() {
+  return function (dispatch) {
+    axios
+      .get(`http://localhost:3001/temperament/`)
+      .then((res) => res.data)
+      .then((data) => {
+        dispatch({ type: GET_TEMPERAMENTS, payload: data });
+      })
+      .catch(() =>
+        swal(
+          "Oops",
+          "Hubo un error cargando los temperamentos, por favor intentelo mas tarde!",
+          "error"
+        )
       );
   };
 }
@@ -38,11 +69,14 @@ export function getDogsById(id) {
       .get(`http://localhost:3001/dogs/${id}`)
       .then((res) => res.data)
       .then((data) => {
-        console.log(data);
         dispatch({ type: GET_DOGS_BY_ID, payload: data });
       })
       .catch(() =>
-        swal("Oops", "Hubo un error, por favor intentelo mas tarde!", "error")
+        swal(
+          "Oops",
+          "Se escapó el perrito, por favor intentelo mas tarde!",
+          "error"
+        )
       );
   };
 }

@@ -23,7 +23,7 @@ export default function DogDetails(props) {
           <b style={{ marginLeft: 670 }}>{dog.name}</b>
         </h4>
         <p style={{ marginLeft: 600 }}>{dog.temperament}</p>
-        <p style={{ marginLeft: 600 }}>Life Span: {dog.life_span}</p>
+        <p style={{ marginLeft: 600 }}>Life Span: {dog.lifespan}</p>
         <p style={{ marginLeft: 600 }}>Weight: {dog.weight} KG</p>
         <p style={{ marginLeft: 600 }}>Height: {dog.height} </p>
       </div>
