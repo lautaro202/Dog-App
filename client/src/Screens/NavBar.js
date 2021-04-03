@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 export default function Home() {
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
-  const classes = useStyles();
   const user = localStorage.getItem("userName");
   const email = localStorage.getItem("emailUser");
 
@@ -32,23 +31,44 @@ export default function Home() {
     setInput("");
   };
 
+  const reload = () => {
+    window.location.reload();
+    window.location.replace("/");
+  };
+
   return (
     <Container>
       {console.log(email)}
       <AppBar style={{ height: 80 }}>
         <ToolBar variant="dense">
           {!user ? (
-            <Link style={{ textDecoration: "none", color: "white" }} to="/">
+            <div
+              style={{
+                textDecoration: "none",
+                color: "white",
+                cursor: "pointer",
+              }}
+              onClick={reload}
+              to="/"
+            >
               Welcome {user}
-            </Link>
+            </div>
           ) : (
-            <Link style={{ textDecoration: "none", color: "white" }} to="/">
+            <div
+              onClick={reload}
+              style={{
+                textDecoration: "none",
+                color: "white",
+                cursor: "pointer",
+              }}
+              to="/"
+            >
               {email === "lautaropaez308@gmail.com" ? (
-                <div>admin {email}</div>
+                <div>Welcome {email}</div>
               ) : (
                 <div>Welcome {user}</div>
               )}{" "}
-            </Link>
+            </div>
           )}
           <form
             onSubmit={(e) => searchDogs(e)}
@@ -72,7 +92,15 @@ export default function Home() {
               style={{ textDecoration: "none", color: "black" }}
               to="/addog"
             >
-              create dog
+              <Button
+                style={{
+                  textDecoration: "none",
+                  color: "white",
+                  marginTop: 10,
+                }}
+              >
+                Add Dog
+              </Button>{" "}
             </Link>
           ) : null}{" "}
           {!user ? (

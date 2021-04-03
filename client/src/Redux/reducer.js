@@ -4,6 +4,7 @@ import {
   GET_DOGS_BY_ID,
   GET_TEMPERAMENTS,
   ADD_DOGS,
+  SET_FILTER,
 } from "./constants";
 const initialState = {
   dogs: {},
@@ -44,6 +45,12 @@ function rootReducer(state = initialState, action) {
         createdDogs: action.payload,
       };
     }
+    case SET_FILTER:
+      console.log("entre");
+      return {
+        ...state,
+        dogs: action.payload,
+      };
     default:
       return state;
   }

@@ -54,10 +54,9 @@ router.get("/dogs", async function (req, res) {
         });
         breed.forEach((dato) => {
           if (dato.dataValues.name.includes(name)) {
-            let temperament = dato.dataValues.temperament.map((temp) => {
-              return temp.dataValues.name;
-            });
-            dato.dataValues.temperament = temperament[0];
+            let temperament = dato.dataValues.temperaments;
+            console.log("temperament", temperament[0].name);
+            dato.dataValues.temperaments = temperament[0].name;
             json.push(dato.dataValues);
           }
         });
@@ -66,13 +65,14 @@ router.get("/dogs", async function (req, res) {
           let crBreed = [];
 
           for (let i = 0; i < json.length; i++) {
+            console.log(json[i]);
             let breedReference = {
               id: json[i].id,
               name: json[i].name,
               img:
-                `https://cdn2.thedogapi.com/images/${json[i].reference_image_id}.jpg` ||
-                breed.image,
-              temperament: json[i].temperament || json[i].temperamentos,
+                json[i].image ||
+                `https://cdn2.thedogapi.com/images/${json[i].reference_image_id}.jpg`,
+              temperament: json[i].temperament || json[i].temperaments,
             };
             crBreed.push(breedReference);
           }
@@ -95,7 +95,6 @@ router.get("/dogs", async function (req, res) {
           json.push(dato.dataValues);
         });
         let breedReference2 = json.map((data) => {
-          console.log(data.image);
           return {
             id: data.id,
             img: data.image.url || data.image,
@@ -119,7 +118,6 @@ router.get("/dogs/:idBreed", async function (req, res) {
     .then(async (json) => {
       let breed = json.find((dato) => dato.id === parseInt(idBreed));
       if (breed) {
-        console.log(breed);
         return res.json({
           img: breed.image && breed.image.url,
           name: breed.name || "error",

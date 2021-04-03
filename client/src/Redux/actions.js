@@ -5,6 +5,7 @@ import {
   GET_DOGS_BY_ID,
   GET_TEMPERAMENTS,
   ADD_DOGS,
+  SET_FILTER,
 } from "./constants";
 import swal from "sweetalert";
 export function getDogs() {
@@ -94,5 +95,13 @@ export const addDogs = (input) => {
         temperaments,
       })
       .then((data) => dispatch({ type: ADD_DOGS, payload: data.data }));
+  };
+};
+
+export const setFilter = (filter) => {
+  console.log("entre");
+  return {
+    type: "SET_FILTER",
+    payload: filter,
   };
 };
