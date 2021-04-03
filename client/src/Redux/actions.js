@@ -4,6 +4,7 @@ import {
   GET_DOGS_BY_NAME,
   GET_DOGS_BY_ID,
   GET_TEMPERAMENTS,
+  ADD_DOGS,
 } from "./constants";
 import swal from "sweetalert";
 export function getDogs() {
@@ -80,3 +81,18 @@ export function getDogsById(id) {
       );
   };
 }
+export const addDogs = (input) => {
+  let { name, height, weight, image, lifespan, temperaments } = input;
+  return function (dispatch) {
+    axios
+      .post(`http://localhost:3001/dogs/`, {
+        name,
+        height,
+        weight,
+        image,
+        lifespan,
+        temperaments,
+      })
+      .then((data) => dispatch({ type: ADD_DOGS, payload: data.data }));
+  };
+};

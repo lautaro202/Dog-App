@@ -3,11 +3,13 @@ import {
   GET_DOGS_BY_NAME,
   GET_DOGS_BY_ID,
   GET_TEMPERAMENTS,
+  ADD_DOGS,
 } from "./constants";
 const initialState = {
   dogs: {},
   dogID: {},
   temperaments: [],
+  createdDogs: {},
 };
 
 function rootReducer(state = initialState, action) {
@@ -34,6 +36,12 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         temperaments: action.payload,
+      };
+    }
+    case ADD_DOGS: {
+      return {
+        ...state,
+        createdDogs: action.payload,
       };
     }
     default:

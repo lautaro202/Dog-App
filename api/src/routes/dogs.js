@@ -17,22 +17,20 @@ let idDog = 300;
 router.post("/dogs", async (req, res) => {
   if (req.body) {
     idDog++;
-    const { name, height, weight, lifespan, tempes } = req.body;
+    const { name, height, weight, lifespan, temperaments, image } = req.body;
     const dog = await Dog.create({
       id: idDog,
       name,
       height,
       weight,
       lifespan,
-      img: "http://localhost:3000/static/media/india.a29799b7.png",
+      image: `${image}` || "Error al cargar la imagen",
     });
-    if (tempes) {
-      tempes.map(async (t) => {
-        const temperament = await Temperament.findAll({
-          where: { name: t },
-        });
-        dog.addTemperament(temperament);
+    if (temperaments) {
+      const temperament = await Temperament.findAll({
+        where: { name: temperaments },
       });
+      await dog.addTemperament(temperament);
       return res.json(dog);
     }
     return res.json(dog);
@@ -50,11 +48,10 @@ router.get("/dogs", async function (req, res) {
           include: [
             {
               model: Temperament,
-              // required: true,
+              required: true,
             },
           ],
         });
-        let perrote = await Dog.findAll();
         breed.forEach((dato) => {
           if (dato.dataValues.name.includes(name)) {
             let temperament = dato.dataValues.temperament.map((temp) => {
@@ -74,7 +71,7 @@ router.get("/dogs", async function (req, res) {
               name: json[i].name,
               img:
                 `https://cdn2.thedogapi.com/images/${json[i].reference_image_id}.jpg` ||
-                "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fashionghana.com%2Fwp-content%2Fuploads%2F2016%2F07%2Fbodhi.jpg&f=1&nofb=1",
+                breed.image,
               temperament: json[i].temperament || json[i].temperamentos,
             };
             crBreed.push(breedReference);
@@ -97,15 +94,13 @@ router.get("/dogs", async function (req, res) {
           dato.dataValues.temperaments = temperament[0];
           json.push(dato.dataValues);
         });
-
         let breedReference2 = json.map((data) => {
+          console.log(data.image);
           return {
             id: data.id,
-            img:
-              (data.image && data.image.url) ||
-              "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fashionghana.com%2Fwp-content%2Fuploads%2F2016%2F07%2Fbodhi.jpg&f=1&nofb=1",
+            img: data.image.url || data.image,
             name: data.name,
-            temperament: data.temperament || data.temperamentos,
+            temperament: data.temperaments || data.temperament,
           };
         });
 
@@ -124,15 +119,14 @@ router.get("/dogs/:idBreed", async function (req, res) {
     .then(async (json) => {
       let breed = json.find((dato) => dato.id === parseInt(idBreed));
       if (breed) {
+        console.log(breed);
         return res.json({
-          img:
-            (breed.image && breed.image.url) ||
-            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fashionghana.com%2Fwp-content%2Fuploads%2F2016%2F07%2Fbodhi.jpg&f=1&nofb=1",
+          img: breed.image && breed.image.url,
           name: breed.name || "error",
           temperament: breed.temperament || breed.temperamentos || "error",
           weight: breed.weight.metric || "error",
           height: breed.height.metric || "error",
-          lifespan: breed.lifespan || "error",
+          lifespan: breed.life_span || "error",
         });
       } else {
         let createDog = await Dog.findAll({
@@ -147,12 +141,10 @@ router.get("/dogs/:idBreed", async function (req, res) {
         );
         if (createDoggy) {
           return res.json({
-            img:
-              createDoggy.dataValues.img ||
-              "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fashionghana.com%2Fwp-content%2Fuploads%2F2016%2F07%2Fbodhi.jpg&f=1&nofb=1",
+            img: createDoggy.dataValues.image || "error al cargar la imagen!",
             name: createDoggy.dataValues.name || " error",
-            // temperament:
-            //   // createDoggy.dataValues.temperament[0].name || " error",
+            temperament:
+              createDoggy.dataValues.temperaments[0].name || " error",
             weight: createDoggy.dataValues.weight || " error",
             height: createDoggy.dataValues.height || "No Enerrcontrado",
             lifespan: createDoggy.dataValues.lifespan || " error",
