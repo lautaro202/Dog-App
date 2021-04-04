@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./css/NavBar.scss";
 import { useDispatch } from "react-redux";
 import { getDogsByBreed } from "../Redux/actions";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import AppBar from "@material-ui/core/AppBar";
@@ -123,13 +122,3 @@ export default function Home() {
     </Container>
   );
 }
-
-const useStyles = makeStyles((theme) => ({
-  inputRoot: {
-    color: "inherit",
-    margin: "auto",
-  },
-  inputInput: {
-    margin: "auto",
-  },
-}));

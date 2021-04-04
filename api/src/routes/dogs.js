@@ -36,7 +36,6 @@ router.post("/dogs", async (req, res) => {
     return res.json(dog);
   }
 });
-///////////////////////////////////////////////////////////////////////////////
 
 router.get("/dogs", async function (req, res) {
   var { name } = req.query;
@@ -65,6 +64,7 @@ router.get("/dogs", async function (req, res) {
         if (json.length > 0) {
           let crBreed = [];
           for (let i = 0; i < json.length; i++) {
+            //breed reference guarda todos los datos que voy a mostrar de los perros
             let breedReference = {
               id: json[i].id,
               name: json[i].name,

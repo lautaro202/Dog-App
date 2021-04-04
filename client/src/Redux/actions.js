@@ -5,7 +5,6 @@ import {
   GET_DOGS_BY_ID,
   GET_TEMPERAMENTS,
   ADD_DOGS,
-  SET_FILTER,
 } from "./constants";
 import swal from "sweetalert";
 export function getDogs() {

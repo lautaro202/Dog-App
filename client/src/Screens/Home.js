@@ -8,6 +8,59 @@ import Dog from "./DogCard";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "./Pagination";
 import { getDogs } from "../Redux/actions";
+
+export default function Home() {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getDogs());
+  }, []);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage, setPostPerPage] = useState(6);
+  const indexOfLastPost = currentPage * postPerPage;
+  const indexOfFirstPost = indexOfLastPost - postPerPage;
+  const dog = useSelector((state) => state.dogs);
+  if (Object.keys(dog).length === 0)
+    return (
+      <div style={{ marginTop: 100, textAlign: "center" }}>No Puppies!</div>
+    );
+  const currentPosts = dog.slice(indexOfFirstPost, indexOfLastPost);
+  console.log(currentPosts);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  return (
+    <div className="App">
+      <Box className={classes.hero}>
+        <Box>PuppyPedia</Box>
+      </Box>
+      <Container maxWidth="lg" className={classes.blogsContainer}>
+        <Typography variant="h4" className={classes.blogTitle}>
+          Breeds
+        </Typography>
+        {!dog ? <div>No existen perros</div> : null}
+        <Container className={classes.cardGrid} maxWidth="md">
+          <Grid container spacing={4}>
+            {currentPosts.map((dogs) => (
+              <Dog
+                key={dogs.id}
+                id={dogs.id}
+                name={dogs.name}
+                temperament={dogs.temperament}
+                img={dogs.img}
+              ></Dog>
+            ))}
+            <Pagination
+              postPerPage={postPerPage}
+              paginate={paginate}
+              totalPosts={dog.length}
+            />
+          </Grid>
+        </Container>
+      </Container>
+    </div>
+  );
+}
+
 const useStyles = makeStyles((theme) => ({
   appBar: {
     backgroundColor: "#fff",
@@ -56,59 +109,3 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
 }));
-
-export default function Home() {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getDogs());
-  }, []);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(6);
-
-  const indexOfLastPost = currentPage * postPerPage;
-  const indexOfFirstPost = indexOfLastPost - postPerPage;
-
-  const dog = useSelector((state) => state.dogs);
-  if (Object.keys(dog).length === 0)
-    return (
-      <div style={{ marginTop: 100, textAlign: "center" }}>No Puppies!</div>
-    );
-  console.log(dog);
-  const currentPosts = dog.slice(indexOfFirstPost, indexOfLastPost);
-  console.log(currentPosts);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  return (
-    <div className="App">
-      <Box className={classes.hero}>
-        <Box>PuppyPedia</Box>
-      </Box>
-      <Container maxWidth="lg" className={classes.blogsContainer}>
-        <Typography variant="h4" className={classes.blogTitle}>
-          Breeds
-        </Typography>
-        {!dog ? <div>No existen perros</div> : null}
-        <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {currentPosts.map((dogs) => (
-              <Dog
-                key={dogs.id}
-                id={dogs.id}
-                name={dogs.name}
-                temperament={dogs.temperament}
-                img={dogs.img}
-              ></Dog>
-            ))}
-            <Pagination
-              postPerPage={postPerPage}
-              paginate={paginate}
-              totalPosts={dog.length}
-            />
-          </Grid>
-        </Container>
-      </Container>
-    </div>
-  );
-}
