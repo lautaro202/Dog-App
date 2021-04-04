@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Dog from "./DogCard";
-import Pagination from "@material-ui/lab/Pagination";
 import { useDispatch, useSelector } from "react-redux";
+import Pagination from "./Pagination";
 import { getDogs } from "../Redux/actions";
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   blogTitle: {
     fontWeight: 800,
     paddingBottom: theme.spacing(3),
+    fontFamily: "roboto",
   },
   card: {
     maxWidth: "100%",
@@ -63,13 +64,21 @@ export default function Home() {
     dispatch(getDogs());
   }, []);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage, setPostPerPage] = useState(6);
+
+  const indexOfLastPost = currentPage * postPerPage;
+  const indexOfFirstPost = indexOfLastPost - postPerPage;
+
   const dog = useSelector((state) => state.dogs);
   if (Object.keys(dog).length === 0)
     return (
       <div style={{ marginTop: 100, textAlign: "center" }}>No Puppies!</div>
     );
-
   console.log(dog);
+  const currentPosts = dog.slice(indexOfFirstPost, indexOfLastPost);
+  console.log(currentPosts);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div className="App">
       <Box className={classes.hero}>
@@ -83,7 +92,7 @@ export default function Home() {
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {dog.map((dogs) => (
+            {currentPosts.map((dogs) => (
               <Dog
                 key={dogs.id}
                 id={dogs.id}
@@ -92,11 +101,13 @@ export default function Home() {
                 img={dogs.img}
               ></Dog>
             ))}
+            <Pagination
+              postPerPage={postPerPage}
+              paginate={paginate}
+              totalPosts={dog.length}
+            />
           </Grid>
         </Container>
-        <Box my={4} className={classes.paginationContainer}>
-          <Pagination count={10} />
-        </Box>
       </Container>
     </div>
   );

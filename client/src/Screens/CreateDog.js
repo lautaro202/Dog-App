@@ -50,8 +50,8 @@ export default function CreateDog() {
 
   return (
     <div className="contenedor">
-      <form onSubmit={handleSubmit} className="formAddProduct">
-        <div className="div">
+      <form onSubmit={handleSubmit} className="form-group">
+        <div className="form-group" style={{ maxWidth: 300 }}>
           <label>Name: </label>
           <input
             type="text"
@@ -60,7 +60,7 @@ export default function CreateDog() {
             onChange={handleInputChange}
           />
         </div>
-        <div className="div">
+        <div className="form-group">
           <label>Height: </label>
           <input
             type="number"
@@ -69,16 +69,7 @@ export default function CreateDog() {
             onChange={handleInputChange}
           />
         </div>
-        <div className="div">
-          <label>URL or URLS of images: </label>
-          <textarea
-            type="text"
-            name="image"
-            value={input.image}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="div">
+        <div className="form-group">
           <label>Weight: </label>
           <input
             type="number"
@@ -87,7 +78,7 @@ export default function CreateDog() {
             onChange={handleInputChange}
           />
         </div>
-        <div className="div">
+        <div className="form-group">
           <label>lifespan: </label>
           <input
             type="number"
@@ -96,7 +87,7 @@ export default function CreateDog() {
             onChange={handleInputChange}
           />
         </div>
-        <span className="temp" class="col-25">
+        <span className="temp">
           <label for="temperaments">Temperaments: </label>
         </span>
         <select
@@ -110,15 +101,24 @@ export default function CreateDog() {
           })}
           {console.log(input.temperaments)}
         </select>
+        <div className="form-group">
+          <label>URL or URLS of images: </label>
+          <textarea
+            type="text"
+            name="image"
+            value={input.image}
+            onChange={handleInputChange}
+          />
+        </div>
 
         <div>
           <input
+            className="btn btn-info"
             type="submit"
             value="Add dog"
             disabled={
               !input.name || !input.height || !input.temperaments || false
             }
-            className="btnAddProduct"
           ></input>
         </div>
       </form>

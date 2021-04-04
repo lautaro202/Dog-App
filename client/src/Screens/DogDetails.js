@@ -16,8 +16,7 @@ export default function DogDetails(props) {
     );
   return (
     <div class="card">
-      {console.log(dog)}
-      <div class="container">
+      <div class="containedor">
         <img src={dog.img}></img>
         <h4>
           <b style={{ marginLeft: 670 }}>{dog.name}</b>

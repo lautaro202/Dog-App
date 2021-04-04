@@ -35,37 +35,6 @@ export default function DogCard(dogs) {
 }
 
 const useStyles = makeStyles((theme) => ({
-  appBar: {
-    backgroundColor: "#fff",
-  },
-  hero: {
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://free4kwallpapers.com/uploads/originals/2020/05/09/puppy-dog-wallpaper.jpg')`,
-    height: "500px",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    position: "relative",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#fff",
-    fontSize: "4rem",
-    [theme.breakpoints.down("sm")]: {
-      height: 300,
-      fontSize: "3em",
-    },
-  },
-  blogsContainer: {
-    paddingTop: theme.spacing(3),
-  },
-  blogTitle: {
-    fontWeight: 800,
-    paddingBottom: theme.spacing(3),
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
   card: {
     height: "100%",
     display: "flex",
@@ -76,20 +45,5 @@ const useStyles = makeStyles((theme) => ({
   },
   cardContent: {
     flexGrow: 1,
-  },
-  media: {
-    height: 240,
-  },
-  cardActions: {
-    display: "flex",
-    margin: "0 10px",
-    justifyContent: "space-between",
-  },
-  author: {
-    display: "flex",
-  },
-  paginationContainer: {
-    display: "flex",
-    justifyContent: "center",
   },
 }));
