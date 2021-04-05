@@ -96,11 +96,3 @@ export const addDogs = (input) => {
       .then((data) => dispatch({ type: ADD_DOGS, payload: data.data }));
   };
 };
-
-export const setFilter = (filter) => {
-  console.log("entre");
-  return {
-    type: "SET_FILTER",
-    payload: filter,
-  };
-};

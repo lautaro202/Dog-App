@@ -68,6 +68,7 @@ export default function CreateDog() {
             value={input.height}
             onChange={handleInputChange}
           />
+          <label> (metric)</label>
         </div>
         <div className="form-group">
           <label>Weight: </label>
@@ -77,6 +78,7 @@ export default function CreateDog() {
             value={input.weight}
             onChange={handleInputChange}
           />
+          <label> (metric)</label>
         </div>
         <div className="form-group">
           <label>lifespan: </label>
@@ -86,6 +88,7 @@ export default function CreateDog() {
             value={input.lifespan}
             onChange={handleInputChange}
           />
+          <label> (years)</label>
         </div>
         <span className="temp">
           <label for="temperaments">Temperaments: </label>

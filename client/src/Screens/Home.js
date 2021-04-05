@@ -8,6 +8,7 @@ import Dog from "./DogCard";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "./Pagination";
 import { getDogs } from "../Redux/actions";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const classes = useStyles();

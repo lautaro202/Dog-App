@@ -33,7 +33,7 @@ const onSubmit = (e) => {
       var user = result.user;
       localStorage.setItem("emailUser", user.email);
       localStorage.setItem("userName", user.displayName);
-      window.location.replace("/");
+      window.location.replace("/home");
     })
     .catch((error) => {
       console.log(error);

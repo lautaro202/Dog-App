@@ -1,14 +1,10 @@
 const { Router } = require("express");
 const { Dog, Temperament } = require("../db.js");
-
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 const { YOUR_API_KEY } = process.env;
-
 const fetch = require("node-fetch");
-
 const router = Router();
-
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 

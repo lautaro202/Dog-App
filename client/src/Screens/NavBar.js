@@ -7,6 +7,8 @@ import Container from "@material-ui/core/Container";
 import AppBar from "@material-ui/core/AppBar";
 import ToolBar from "@material-ui/core/Toolbar";
 import { Link } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
+
 export default function Home() {
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
@@ -32,8 +34,9 @@ export default function Home() {
 
   const reload = () => {
     window.location.reload();
-    window.location.replace("/");
+    window.location.replace("/home");
   };
+  const check = useRouteMatch("/home");
 
   return (
     <Container>
@@ -72,7 +75,7 @@ export default function Home() {
           <form
             onSubmit={(e) => searchDogs(e)}
             style={{ margin: "auto", width: 600 }}
-            className="searchbar"
+            className={`search-${check?.isExact ? "active" : "inactive"}`}
           >
             <div className="search__container">
               <p className="search__title"></p>
