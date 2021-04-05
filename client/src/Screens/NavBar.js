@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import "./css/NavBar.scss";
 import { useDispatch } from "react-redux";
 import { getDogsByBreed } from "../Redux/actions";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import AppBar from "@material-ui/core/AppBar";
 import ToolBar from "@material-ui/core/Toolbar";
 import { Link } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom";
@@ -39,10 +36,10 @@ export default function Home() {
   const check = useRouteMatch("/home");
 
   return (
-    <Container>
+    <div>
       {console.log(email)}
-      <AppBar style={{ height: 80 }}>
-        <ToolBar variant="dense">
+      <div style={{ height: 80, backgroundColor: "#0D90D4" }}>
+        <ToolBar>
           {!user ? (
             <div
               style={{
@@ -94,7 +91,8 @@ export default function Home() {
               style={{ textDecoration: "none", color: "black" }}
               to="/addog"
             >
-              <Button
+              <button
+                className="btn btn-primary"
                 style={{
                   textDecoration: "none",
                   color: "white",
@@ -102,7 +100,7 @@ export default function Home() {
                 }}
               >
                 Add Dog
-              </Button>{" "}
+              </button>{" "}
             </Link>
           ) : null}{" "}
           {!user ? (
@@ -110,18 +108,29 @@ export default function Home() {
               style={{ textDecoration: "none", color: "white" }}
               to="/login"
             >
-              Login
+              <button
+                style={{
+                  textDecoration: "none",
+                  color: "white",
+                  marginTop: 10,
+                }}
+                className="btn btn-primary"
+              >
+                {" "}
+                Login
+              </button>
             </Link>
           ) : (
-            <Button
+            <button
+              className="btn btn-primary"
               style={{ textDecoration: "none", color: "white", marginTop: 10 }}
               onClick={logOut}
             >
               Logout
-            </Button>
+            </button>
           )}
         </ToolBar>
-      </AppBar>
-    </Container>
+      </div>
+    </div>
   );
 }

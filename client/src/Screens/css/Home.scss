@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Train+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+.dog-card {
+    display: grid;
+    grid-template-columns: 30rem 30rem 30rem;
+}
+.text {
+    h1 {
+        font-family: 'Train One', cursive;    }
+    color: white;
+    background-image: url('https://free4kwallpapers.com/uploads/originals/2020/05/09/puppy-dog-wallpaper.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+.bg-image {
+    height: 100%;
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+}
+.breed {
+    margin-top: 30px;
+    font-family: 'Poppins', sans-serif; font-size: 30px;
+ font-weight: bold;
+}

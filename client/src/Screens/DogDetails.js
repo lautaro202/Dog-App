@@ -17,7 +17,12 @@ export default function DogDetails(props) {
   return (
     <div class="card">
       <div class="containedor">
-        <img alt="error al cargar la imagen" src={dog.img}></img>
+        <img
+          className="imagen-perro"
+          style={{ marginLeft: 610 }}
+          alt="error al cargar la imagen"
+          src={dog.img}
+        ></img>
         <h4>
           <b style={{ marginLeft: 670 }}>{dog.name}</b>
         </h4>

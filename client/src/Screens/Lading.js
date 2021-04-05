@@ -1,16 +1,16 @@
 import React from "react";
 import "./css/Landing.scss";
 import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
 export default function Lading() {
   return (
-    <div className="text-container">
+    <div style={{ marginTop: 0 }} className="text-container">
       <h1>
         Welcome to.... <span class="badge bg-secondary">PUPPYPEDIA</span>
       </h1>
       <div>
         <Link style={{ textDecoration: "none", color: "black" }} to="/home">
-          <Button
+          <button
+            className="btn btn-primary"
             style={{
               backgroundColor: "gray",
               textDecoration: "none",
@@ -19,7 +19,7 @@ export default function Lading() {
             }}
           >
             Home
-          </Button>
+          </button>
         </Link>
       </div>
       <div className="invisible">a</div>

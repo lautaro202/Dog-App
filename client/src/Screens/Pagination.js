@@ -7,7 +7,7 @@ export default function Pagination({ postPerPage, totalPosts, paginate }) {
   }
   return (
     <nav>
-      <ul style={{ right: 900, display: "flex" }} className="pagination">
+      <ul style={{ marginLeft: 200 }} className="pagination">
         {pageNumbers.map((number) => (
           <li style={{ cursor: "pointer" }} key={number} className="page-item">
             <div onClick={() => paginate(number)} className="page-link">
