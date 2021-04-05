@@ -3,6 +3,8 @@
 .dog-card {
     display: grid;
     grid-template-columns: 30rem 30rem 30rem;
+    width: 100%;
+    height: 100%;
 }
 .text {
     h1 {

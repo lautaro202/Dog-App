@@ -32,7 +32,6 @@ export default function Home() {
         <div>{!dog ? <div>No existen perros</div> : null}</div>
       </div>
       <div className="breed">Breeds</div>
-
       <div className="container-dogs">
         <div className="dog-card">
           {currentPosts.map((dogs) => (
