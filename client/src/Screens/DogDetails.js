@@ -19,17 +19,21 @@ export default function DogDetails(props) {
       <div class="containedor">
         <img
           className="imagen-perro"
-          style={{ marginLeft: 610 }}
+          style={{
+            display: "block",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
           alt="error al cargar la imagen"
           src={dog.img}
         ></img>
         <h4>
           <b style={{ marginLeft: 670 }}>{dog.name}</b>
         </h4>
-        <p style={{ marginLeft: 600 }}>Temperaments: {dog.temperament}</p>
-        <p style={{ marginLeft: 600 }}>Life Span: {dog.lifespan}</p>
-        <p style={{ marginLeft: 600 }}>Weight: {dog.weight} KG</p>
-        <p style={{ marginLeft: 600 }}>Height: {dog.height} CM </p>
+        <p style={{ textAlign: "center" }}>Temperaments: {dog.temperament}</p>
+        <p style={{ textAlign: "center" }}>Life Span: {dog.lifespan}</p>
+        <p style={{ textAlign: "center" }}>Weight: {dog.weight} KG</p>
+        <p style={{ textAlign: "center" }}>Height: {dog.height} CM </p>
       </div>
     </div>
   );

@@ -20,10 +20,8 @@ export default function Home() {
 
   const handleChange = (e) => {
     setInput(e.target.value);
-    console.log(e.target.value);
   };
   const searchDogs = (e) => {
-    console.log("estoy accionando");
     e.preventDefault();
     dispatch(getDogsByBreed(input));
     setInput("");
@@ -37,7 +35,6 @@ export default function Home() {
 
   return (
     <div>
-      {console.log(email)}
       <div style={{ height: 80, backgroundColor: "#0D90D4" }}>
         <ToolBar>
           {!user ? (

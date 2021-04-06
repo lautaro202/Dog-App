@@ -4,6 +4,7 @@ import {
   GET_DOGS_BY_ID,
   GET_TEMPERAMENTS,
   ADD_DOGS,
+  GET_DOGS_BY_TEMP,
 } from "./constants";
 const initialState = {
   dogs: {},
@@ -42,6 +43,12 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         createdDogs: action.payload,
+      };
+    }
+    case GET_DOGS_BY_TEMP: {
+      return {
+        ...state,
+        dogs: action.payload,
       };
     }
     default:

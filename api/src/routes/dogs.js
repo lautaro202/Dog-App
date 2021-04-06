@@ -188,9 +188,28 @@ fetch(`https://api.thedogapi.com/v1/breeds/?api_key=${YOUR_API_KEY}`)
   })
   .catch((err) => console.error(err));
 
+router.get("/dogs/temperament/:nameTemp", async function (req, res) {
+  const { nameTemp } = req.params;
+  await Dog.findAll({
+    include: {
+      model: Temperament,
+      where: {
+        name: nameTemp,
+      },
+    },
+  })
+    .then((dogs) => {
+      console.log(dogs);
+      res.status(201).json(dogs);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send(err);
+    });
+});
+
 router.get("/temperament", async function (req, res) {
   await Temperament.findAll().then((result) => res.json(result));
 });
-///////////////////////////////////////////////////////////////////////////////
 
 module.exports = router;

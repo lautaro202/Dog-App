@@ -5,6 +5,7 @@ import {
   GET_DOGS_BY_ID,
   GET_TEMPERAMENTS,
   ADD_DOGS,
+  GET_DOGS_BY_TEMP,
 } from "./constants";
 import swal from "sweetalert";
 export function getDogs() {
@@ -13,7 +14,6 @@ export function getDogs() {
       .get(`http://localhost:3001/dogs`)
       .then((res) => res.data)
       .then((data) => {
-        console.log(data);
         dispatch({ type: GET_DOGS, payload: data });
       })
       .catch(() =>
@@ -28,12 +28,10 @@ export function getDogs() {
 
 export function getDogsByBreed(query) {
   return function (dispatch) {
-    console.log("hola");
     axios
       .get(`http://localhost:3001/dogs?name=${query}`)
       .then((res) => res.data)
       .then((data) => {
-        console.log(data);
         dispatch({ type: GET_DOGS_BY_NAME, payload: data });
       })
       .catch(() =>
@@ -94,5 +92,16 @@ export const addDogs = (input) => {
         temperaments,
       })
       .then((data) => dispatch({ type: ADD_DOGS, payload: data.data }));
+  };
+};
+
+export const getDogsByTemp = (nameTemp) => {
+  return function (dispatch) {
+    axios
+      .get(`http://localhost:3001/dogs/temperament/${nameTemp}`)
+      .then((data) => {
+        console.log(data);
+        dispatch({ type: GET_DOGS_BY_TEMP, payload: data.data });
+      });
   };
 };

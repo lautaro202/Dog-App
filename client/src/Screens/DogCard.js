@@ -5,8 +5,13 @@ import "./css/DogDetail.scss";
 export default function DogCard(dogs) {
   return (
     <div className="container">
+      {console.log(dogs)}
       <div>
-        <img src={dogs.img} title="Image title" />
+        {dogs.img ? (
+          <img src={dogs.img} title="Image" />
+        ) : (
+          <img src={dogs.image} title="Title image"></img>
+        )}
         <div>
           <div>
             <Link
@@ -20,7 +25,12 @@ export default function DogCard(dogs) {
               {dogs.name}
             </Link>
           </div>
-          <div>{dogs.temperament}</div>
+          {console.log(dogs.temperaments)}
+          {dogs.temperament ? (
+            <div>{dogs.temperament}</div>
+          ) : (
+            <div>{dogs.temperaments[0].name}</div>
+          )}
         </div>
       </div>
     </div>
